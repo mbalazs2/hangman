@@ -1,6 +1,16 @@
+# hangman game
+# very simple
+# using the 1000 most common english language words
+# a python program
+# graphics module used
+# gui
+# mouse click must be used (outside the entry field) after entering a letter
+
 from random import randint
 from graphics import *
 import time
+
+# function draws the man according to letters guessed or not
 
 def draw(number):
     ln=Line(Point(50,50),Point(50,200))
@@ -46,11 +56,22 @@ def draw(number):
     ln.setOutline('black')
     ln.draw(win)
 
+# dictionary used to massage user after guessing the word
+
 dicti={0:'Lucky :-)',1:'Excellent!',2:'Very good!',3:'Good.',\
        4:'This was hard...',5:'Bearly made it...'}
+       
+# the main program loop       
+
 while True:
+
+# creating the window
+
     win=GraphWin('Hangman',600,600)
     win.setBackground(color_rgb(255,255,255))
+    
+# choosing a word
+    
     a=randint(1,1000)
     fp=open('list_of_words.txt')
     line=0
@@ -60,6 +81,9 @@ while True:
     fp.close()
     b=b.strip()
     b=b.lower()
+    
+# initial drawings + massages for the user
+    
     c=''
     for letter in b:
         c+='_'
@@ -94,6 +118,9 @@ while True:
         pop.draw(win)
         win.getMouse()
         d=pop.getText().lower()
+        
+# error massages
+        
         if d not in 'abcdefghijklmnopqrstuvwxyz' or len(d)!=1:
             txt4=Text(Point(400,152),'That is not a letter')
             txt4.draw(win)
@@ -111,6 +138,9 @@ while True:
             for x in range(len(b)):
                 if b[x]==d:
                     c[x]=d
+                    
+# massages if the user guessed the word
+                    
             if c==list(b):
                 txt9.undraw()
                 txt9=Text(Point(300,100),'  '.join(c))
@@ -129,6 +159,9 @@ while True:
             continue
         counter+=1
         j=draw(counter)
+        
+# massages if the user did not guess (made 6 mistakes in total)
+        
         if counter==6:
             txt6=Text(Point(300,330),b)
             txt6.setSize(24)
@@ -138,6 +171,9 @@ while True:
             txt8.draw(win)
             j=draw(counter)
             break
+            
+# asking if user wants to play again (entry field)
+            
     txt11=Text(Point(225,550),'Do you want to play again? (y/n):')
     txt11.setSize(20)
     txt11.draw(win)
@@ -145,6 +181,9 @@ while True:
     pop1.setFill('white')
     pop1.draw(win)
     win.getMouse()
+    
+# for ending the program without it crashing, mouse click must be used inside the window
+    
     if pop1.getText().lower()!='y':
         win.close()
         win=GraphWin('Hangman',600,600)
