@@ -1,0 +1,160 @@
+from random import randint
+from graphics import *
+import time
+
+def draw(number):
+    ln=Line(Point(50,50),Point(50,200))
+    ln.setOutline('black')
+    ln.draw(win)
+    ln=Line(Point(25,200),Point(75,200))
+    ln.setOutline('black')
+    ln.draw(win)
+    ln=Line(Point(50,50),Point(110,50))
+    ln.setOutline('black')
+    ln.draw(win)
+    ln=Line(Point(110,50),Point(110,75))
+    ln.setOutline('black')
+    ln.draw(win)
+    if number==0:
+        return None
+    cyrc=Circle(Point(110,90),15)
+    cyrc.setOutline('black')
+    cyrc.draw(win)
+    if number==1:
+        return None
+    ln=Line(Point(110,105),Point(110,155))
+    ln.setOutline('black')
+    ln.draw(win)
+    if number==2:
+        return None
+    ln=Line(Point(110,125),Point(85,110))
+    ln.setOutline('black')
+    ln.draw(win)
+    if number==3:
+        return None
+    ln=Line(Point(110,125),Point(135,110))
+    ln.setOutline('black')
+    ln.draw(win)
+    if number==4:
+        return None
+    ln=Line(Point(110,155),Point(90,185))
+    ln.setOutline('black')
+    ln.draw(win)
+    if number==5:
+        return None
+    ln=Line(Point(110,155),Point(130,185))
+    ln.setOutline('black')
+    ln.draw(win)
+
+dicti={0:'Lucky :-)',1:'Excellent!',2:'Very good!',3:'Good.',\
+       4:'This was hard...',5:'Bearly made it...'}
+while True:
+    win=GraphWin('Hangman',600,600)
+    win.setBackground(color_rgb(255,255,255))
+    a=randint(1,1000)
+    fp=open('list_of_words.txt')
+    line=0
+    while line!=a:
+        b=fp.readline()
+        line+=1
+    fp.close()
+    b=b.strip()
+    b=b.lower()
+    c=''
+    for letter in b:
+        c+='_'
+    c=list(c)
+    e=''
+    counter=0
+    txt1=Text(Point(300,25),'HANGMAN')
+    txt1.draw(win)
+    txt2=Text(Point(150,300),'')
+    txt9=Text(Point(300,100),''.join(c))
+    txt10=Text(Point(230,150),'Enter a letter:')
+    while True:
+        line1=Line(Point(3,220),Point(500,220))
+        line1.setOutline('black')
+        line1.draw(win)
+        if e!='':
+            txt2.undraw()
+            txt2=Text(Point(170,260),'Letters already tried: {}'.format(e))
+            txt2.setSize(14)
+            txt2.draw(win)
+        j=draw(counter)
+        txt9.undraw()
+        txt9=Text(Point(300,100),'  '.join(c))
+        txt9.setSize(20)
+        txt9.draw(win)
+        txt10.undraw()
+        txt10=Text(Point(220,150),'Enter a letter:')
+        txt10.setSize(15)
+        txt10.draw(win)
+        pop=Entry(Point(300,150),2)
+        pop.setFill('white')
+        pop.draw(win)
+        win.getMouse()
+        d=pop.getText().lower()
+        if d not in 'abcdefghijklmnopqrstuvwxyz' or len(d)!=1:
+            txt4=Text(Point(400,152),'That is not a letter')
+            txt4.draw(win)
+            time.sleep(2)
+            txt4.undraw()
+            continue
+        if d in e:
+            txt5=Text(Point(415,152),'Already guessed that letter!')
+            txt5.draw(win)
+            time.sleep(2)
+            txt5.undraw()
+            continue
+        e+=d+' '
+        if d in b:
+            for x in range(len(b)):
+                if b[x]==d:
+                    c[x]=d
+            if c==list(b):
+                txt9.undraw()
+                txt9=Text(Point(300,100),'  '.join(c))
+                txt9.setSize(20)
+                txt9.draw(win)
+                txt6=Text(Point(300,330),b)
+                txt6.setSize(24)
+                txt6.draw(win)
+                txt6=Text(Point(300,400),'You won!')
+                txt6.setSize(30)
+                txt6.draw(win)
+                txt7=Text(Point(300,460),dicti[counter])
+                txt7.setSize(20)
+                txt7.draw(win)
+                break
+            continue
+        counter+=1
+        j=draw(counter)
+        if counter==6:
+            txt6=Text(Point(300,330),b)
+            txt6.setSize(24)
+            txt6.draw(win)
+            txt8=Text(Point(300,400),'You lost!')
+            txt8.setSize(30)
+            txt8.draw(win)
+            j=draw(counter)
+            break
+    txt11=Text(Point(225,550),'Do you want to play again? (y/n):')
+    txt11.setSize(20)
+    txt11.draw(win)
+    pop1=Entry(Point(450,550),2)
+    pop1.setFill('white')
+    pop1.draw(win)
+    win.getMouse()
+    if pop1.getText().lower()!='y':
+        win.close()
+        win=GraphWin('Hangman',600,600)
+        win.setBackground(color_rgb(255,255,255))
+        txt12=Text(Point(300,300),'BYE!')
+        txt12.setSize(36)
+        txt12.draw(win)
+        win.getMouse()
+        win.close()
+        break
+    else:
+        win.close()
+
